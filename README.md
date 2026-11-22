@@ -70,3 +70,6 @@ Se plantea utilizar el patrón MVC (Modelo-Vista-Controlador) mediante Laravel, 
 
 Proyecto formativo en etapa de planificación y desarrollo.
 
+## Actualizacion
+
+Se realizo la conexion local con GitHud para ir subiendo la actualizaciones que vayamos realizando
