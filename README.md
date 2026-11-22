@@ -70,6 +70,15 @@ Se plantea utilizar el patrón MVC (Modelo-Vista-Controlador) mediante Laravel, 
 
 Proyecto formativo en etapa de planificación y desarrollo.
 
+## Control de versiones
+
+Este proyecto utiliza Git para el control de versiones
+y GitHub como repositorio remoto.
+
+El equipo utiliza commits descriptivos para registrar
+los cambios y mantiene sincronizado el repositorio local
+con el remoto.
+
 ## Actualizacion
 
 Se realizo la conexion local con GitHud para ir subiendo la actualizaciones que vayamos realizando
