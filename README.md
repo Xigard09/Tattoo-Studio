@@ -82,3 +82,12 @@ con el remoto.
 ## Actualizacion
 
 Se realizo la conexion local con GitHud para ir subiendo la actualizaciones que vayamos realizando
+
+## Comentario
+## Control de versiones
+
+El proyecto TATTOO-STUDIO utiliza Git como herramienta
+de control de versiones y GitHub como repositorio remoto.
+
+Los cambios se registran mediante commits descriptivos
+y se sincronizan utilizando los comandos push y pull.
