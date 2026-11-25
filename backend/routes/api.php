@@ -48,4 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::put('/citas/{id}', [CitaController::class, 'update']);
 
+    Route::delete('/citas/{id}', [CitaController::class, 'destroy']);
+    
+
 });

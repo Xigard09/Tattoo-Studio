@@ -289,4 +289,42 @@ public function update(Request $request, $id)
 
     }, 3);
 }
+
+public function destroy(Request $request, $id)
+{
+    return DB::transaction(function () use ($request, $id) {
+
+        $cita = Cita::where('id_cita', $id)
+            ->where('id_cliente', $request->user()->id_cliente)
+            ->lockForUpdate()
+            ->firstOrFail();
+
+        if (!in_array($cita->estado_cita, [
+            'Pendiente',
+            'Confirmada'
+        ])) {
+            return response()->json([
+                'mensaje' => 'La cita no se puede cancelar en su estado actual.'
+            ], 409);
+        }
+
+        $cita->estado_cita = 'Cancelada';
+            $fechaHoraCita = Carbon::parse(
+    $cita->fecha_cita . ' ' . $cita->hora
+);
+
+if ($fechaHoraCita->lessThanOrEqualTo(Carbon::now())) {
+    return response()->json([
+        'mensaje' => 'No se puede cancelar una cita vencida.'
+    ], 409);
+}
+        $cita->save();
+
+        return response()->json([
+            'mensaje' => 'Cita cancelada correctamente.',
+            'cita' => $cita->load(['tatuador', 'servicio'])
+        ], 200);
+    });
+}
+
 }
