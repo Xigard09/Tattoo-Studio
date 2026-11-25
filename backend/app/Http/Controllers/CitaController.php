@@ -308,17 +308,19 @@ public function destroy(Request $request, $id)
             ], 409);
         }
 
-        $cita->estado_cita = 'Cancelada';
-            $fechaHoraCita = Carbon::parse(
-    $cita->fecha_cita . ' ' . $cita->hora
+        $fechaHoraCita = Carbon::parse(
+        $cita->fecha_cita . ' ' . $cita->hora,
+        'America/Bogota'
 );
 
-if ($fechaHoraCita->lessThanOrEqualTo(Carbon::now())) {
-    return response()->json([
-        'mensaje' => 'No se puede cancelar una cita vencida.'
+        if ($fechaHoraCita->lessThanOrEqualTo(Carbon::now('America/Bogota'))) {
+        return response()->json([
+            'mensaje' => 'No se puede cancelar una cita vencida.'
     ], 409);
 }
-        $cita->save();
+
+$cita->estado_cita = 'Cancelada';
+$cita->save();
 
         return response()->json([
             'mensaje' => 'Cita cancelada correctamente.',
