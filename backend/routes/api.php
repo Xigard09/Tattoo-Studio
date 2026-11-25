@@ -46,4 +46,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/citas', [CitaController::class, 'store']);
 
+    Route::put('/citas/{id}', [CitaController::class, 'update']);
+
 });

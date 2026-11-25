@@ -185,5 +185,108 @@ private function existeSolapamiento(
 
     }, 3);
 }
+public function update(Request $request, $id)
+{
+    $datos = $request->validate([
+        'fecha_cita' => [
+            'required',
+            'date_format:Y-m-d',
+            'after_or_equal:today'
+        ],
 
+        'hora' => [
+            'required',
+            'date_format:H:i'
+        ],
+
+        'id_tatuador' => [
+            'required',
+            'integer',
+            'exists:tatuador,id_tatuador'
+        ],
+
+        'id_servicio' => [
+            'required',
+            'integer',
+            Rule::exists('servicio', 'id_servicio')
+                ->where('estado', 'Activo')
+        ]
+    ]);
+
+    $inicio = Carbon::parse(
+        $datos['fecha_cita'] . ' ' . $datos['hora'],
+        'America/Bogota'
+    );
+
+    if ($inicio->lte(Carbon::now('America/Bogota'))) {
+        return response()->json([
+            'mensaje' => 'La cita debe programarse en un horario futuro.'
+        ], 422);
+    }
+
+    return DB::transaction(function () use (
+        $datos,
+        $request,
+        $inicio,
+        $id
+    ) {
+
+        Tatuador::where(
+            'id_tatuador',
+            $datos['id_tatuador']
+        )->lockForUpdate()->firstOrFail();
+
+        $cita = Cita::where(
+            'id_cliente',
+            $request->user()->id_cliente
+        )->lockForUpdate()->findOrFail($id);
+
+        if ($cita->estado_cita !== 'Pendiente') {
+            return response()->json([
+                'mensaje' => 'Solo se pueden modificar citas pendientes.'
+            ], 409);
+        }
+
+        $servicio = Servicio::where(
+            'id_servicio',
+            $datos['id_servicio']
+        )->where('estado', 'Activo')->firstOrFail();
+
+        $duracion = $this->obtenerDuracionMinutos(
+            $servicio->duracion_estimada ?? ''
+        );
+
+        if ($duracion <= 0) {
+            throw new \InvalidArgumentException(
+                'La duración del servicio debe ser mayor que cero.'
+            );
+        }
+
+        $fin = $inicio->copy()->addMinutes($duracion);
+
+        if ($this->existeSolapamiento(
+            $datos['id_tatuador'],
+            $inicio,
+            $fin,
+            $cita->id_cita
+        )) {
+            return response()->json([
+                'mensaje' => 'El tatuador ya tiene una cita en ese horario.'
+            ], 409);
+        }
+
+        $cita->update([
+            'fecha_cita' => $datos['fecha_cita'],
+            'hora' => $datos['hora'],
+            'id_tatuador' => $datos['id_tatuador'],
+            'id_servicio' => $datos['id_servicio']
+        ]);
+
+        return response()->json([
+            'mensaje' => 'Cita actualizada correctamente.',
+            'cita' => $cita->load(['tatuador', 'servicio'])
+        ], 200);
+
+    }, 3);
+}
 }
