@@ -1,0 +1,24 @@
+$kind: http-request
+description: ""
+url: "{{base_url}}/api/citas/{{id_cita}}"
+method: PUT
+headers:
+  Accept: application/json
+body:
+  type: json
+  content: "{\r
+
+    \    \"fecha_cita\": \"2026-12-20\",\r
+
+    \    \"hora\": \"10:00\",\r
+
+    \    \"id_tatuador\": 1,\r
+
+    \    \"id_servicio\": 2\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 9000

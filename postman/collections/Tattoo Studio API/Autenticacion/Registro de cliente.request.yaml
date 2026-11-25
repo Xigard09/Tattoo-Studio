@@ -1,0 +1,22 @@
+$kind: http-request
+description: ""
+url: "{{base_url}}/api/registro"
+method: POST
+headers:
+  Accept: application/json
+body:
+  type: json
+  content: "{\r
+
+    \    \"nombre\": \"Cliente Prueba\",\r
+
+    \    \"telefono\": \"3001234567\",\r
+
+    \    \"correo\": \"prueba@example.com\",\r
+
+    \    \"password\": \"{{password}}\",\r
+
+    \    \"password_confirmation\": \"{{password}}\"\r
+
+    }"
+order: 2000
