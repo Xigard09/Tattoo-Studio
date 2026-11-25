@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CitaController;
+
 
 Route::get('/estado', function () {
     return response()->json([
@@ -25,5 +27,23 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum'); 
 //Ruta Cierre de sesion
+
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth:sanctum');
+
+    Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/citas', [CitaController::class, 'index']);
+
+    Route::get('/citas/{id}', [CitaController::class, 'show']);
+
+});
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/citas', [CitaController::class, 'index']);
+
+    Route::get('/citas/{id}', [CitaController::class, 'show']);
+
+    Route::post('/citas', [CitaController::class, 'store']);
+
+});
