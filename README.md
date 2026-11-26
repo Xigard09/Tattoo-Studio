@@ -2,9 +2,7 @@
 
 ## Descripción del proyecto
 
-Tattoo Studio es un proyecto formativo que consiste en desarrollar una aplicación web para la gestión de citas de un estudio de tatuajes.
-
-El sistema busca facilitar la administración de clientes, tatuadores, servicios y reservas, permitiendo organizar los horarios y consultar la disponibilidad de los profesionales.
+Tattoo Studio es nuestro proyecto formativo de Análisis y Desarrollo de Software (ADSO), orientado a la gestión de citas de un estudio de tatuajes. Buscamos facilitar la organización de clientes, tatuadores, servicios y reservas.
 
 ## Objetivo
 
@@ -14,101 +12,183 @@ Desarrollar una aplicación web que permita gestionar de manera organizada el pr
 
 | Tecnología | Función |
 |---|---|
-| PHP | Desarrollo del backend |
-| Laravel | Framework backend |
-| MySQL | Gestión de base de datos |
-| HTML5 | Estructura de las interfaces |
-| CSS3 | Diseño visual |
-| JavaScript | Interactividad |
-| Git | Control de versiones |
-| GitHub | Almacenamiento del repositorio |
+| PHP 8.5 y Laravel 12 | Backend y API REST |
+| Laravel Sanctum | Autenticación mediante tokens |
+| MySQL 8 | Base de datos relacional |
+| HTML5, CSS3 y JavaScript | Interfaces y estilos |
+| React 19 | Componentes de interfaz |
+| React Router 7 | Navegación y rutas protegidas |
+| Axios | Solicitudes HTTP |
+| Vite 8 | Servidor de desarrollo y compilación |
+| Node.js y npm | Entorno y dependencias del frontend |
+| Git y GitHub | Control de versiones |
 
-## Módulos principales
+## Módulos y estado actual
 
-- **Clientes:** registro y administración de clientes.
-- **Tatuadores:** gestión de profesionales y especialidades.
-- **Servicios:** administración de los servicios ofrecidos.
-- **Citas:** programación, consulta y cancelación de reservas.
-- **Disponibilidad:** consulta de horarios disponibles.
+- Clientes: registro, inicio y cierre de sesión y consulta del perfil.
+- Tatuadores y servicios: catálogo dinámico consultado mediante la API.
+- Citas: registro, consulta, edición y cancelación lógica de reservas propias.
+- Disponibilidad: validación de fechas futuras y solapamiento de horarios considerando la duración del servicio.
+- Seguridad: contraseñas protegidas mediante hashing, tokens de acceso, autorización de citas propias y rutas protegidas.
+- Interfaces: diseño responsive y mensajes de éxito y error.
+
+Quedan pendientes los módulos administrativos de tatuadores y servicios, la consulta anticipada de horarios disponibles y otras funcionalidades previstas, como los recordatorios. La disponibilidad actualmente se verifica al guardar la cita.
+
+## Arquitectura
+
+Utilizamos Laravel con una organización basada en MVC para la lógica de negocio y el acceso a datos. React constituye la capa de presentación independiente. La comunicación se realiza mediante una API REST con mensajes JSON.
+
+```text
+React + Axios --> API REST Laravel + Sanctum --> MySQL
+```
+
+En desarrollo, Vite redirige las solicitudes `/api` a `http://127.0.0.1:8000` mediante el proxy definido en `frontend/vite.config.js`.
+
+## Estructura del repositorio
+
+```text
+Tattoo-Studio/
+├── .postman/
+├── backend/                 # Laravel
+├── frontend/                # React y Vite
+│   └── src/
+│       ├── components/
+│       ├── context/
+│       ├── pages/
+│       ├── services/
+│       ├── styles/
+│       └── App.jsx
+├── postman/                 # Colección de pruebas
+├── API.md                   # Documentación de la API
+├── index.html               # Prototipo anterior
+├── nosotros.html            # Prototipo anterior
+└── README.md
+```
 
 ## Base de datos
 
-Utilizamos MySQL y la base de datos `tattoo_book` para almacenar la información del sistema.
-
-Las principales entidades son:
-
-- Cliente.
-- Tatuador.
-- Servicio.
-- Cita.
-
-## Arquitectura del sistema
-
-Utilizamos el patrón MVC (Modelo-Vista-Controlador) mediante Laravel, separando la lógica del negocio, el acceso a datos y la presentación de la información.
+Utilizamos MySQL y la base de datos `tattoo_book`. Las entidades principales son cliente, tatuador, servicio y cita. Sanctum utiliza además la tabla `personal_access_tokens`.
 
 ## Estándares de codificación
 
-- Variables: camelCase.
-- Clases: PascalCase.
-- Métodos: camelCase.
-- Estándar de PHP: PSR-12.
-- Organización de archivos según la estructura de Laravel.
-- Documentación mediante comentarios descriptivos.
+- Variables y métodos: camelCase.
+- Clases y componentes React: PascalCase.
+- PHP: PSR-12.
+- Organización según la estructura de Laravel y separación de componentes, páginas, servicios y estilos en React.
+- Comentarios descriptivos cuando sean necesarios.
 
-## Herramientas de desarrollo
+## Herramientas y requisitos
 
-- Visual Studio Code.
-- XAMPP.
-- Composer.
-- MySQL Workbench.
-- Git y GitHub.
-- Postman.
+Visual Studio Code, Git, PHP 8.5 con las extensiones requeridas por Laravel (incluida PDO MySQL), Composer, MySQL 8, MySQL Workbench, Node.js compatible con Vite 8 (se recomienda Node.js 22.12 o superior de una rama LTS compatible), npm y Postman. XAMPP puede utilizarse como herramienta auxiliar si sus versiones son compatibles.
 
-## Estado del proyecto
+## Instalación en otro computador (Windows)
 
-Actualmente estamos en la etapa de desarrollo. Ya tenemos la API REST para el registro e inicio de sesión de clientes y la gestión de citas. Podemos consultar, crear, actualizar y cancelar citas desde Postman.
+### 1. Descargar el repositorio
 
-Los datos de tatuadores y servicios se utilizan en las citas. Todavía queda pendiente la integración de la API con las interfaces y el desarrollo de los demás módulos administrativos y de disponibilidad previstos en el proyecto.
+```powershell
+git clone -b feature/frontend-react https://github.com/Xigard09/Tattoo-Studio.git
+cd Tattoo-Studio
+```
 
-## Ejecutar el backend
+Si ya existe una copia local, revisar `git status` antes de cambiar de rama o actualizarla con `git pull`.
 
-Para trabajar con la API necesitamos PHP 8.5, Composer y MySQL 8. Desde la carpeta del proyecto:
+### 2. Configurar el backend
 
-```bash
+```powershell
 cd backend
 composer install
 ```
 
-Configurar el archivo `.env` con los datos de conexión local a MySQL y la base de datos `tattoo_book`. Si es una instalación nueva, copiar `.env.example` a `.env` y ejecutar `php artisan key:generate`. Si ya tenemos un `.env` configurado, podemos conservarlo.
+En una instalación nueva, crear el archivo de entorno y generar la clave:
 
-La base de datos debe contar con las tablas del proyecto y las migraciones de autenticación correspondientes. Si se restaura una copia de la base de datos que ya incluye estas migraciones, no es necesario ejecutarlas nuevamente. No usar `migrate:fresh`, ya que elimina las tablas existentes.
-
-Con MySQL iniciado, ejecutar:
-
-```bash
-php artisan serve
+```powershell
+Copy-Item .env.example .env
+php artisan key:generate
 ```
 
-La API queda disponible en `http://127.0.0.1:8000/api/estado`.
+Si ya existe un `.env` configurado, conservarlo. Ajustar la conexión según las credenciales locales:
+
+```dotenv
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=tattoo_book
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Los valores de usuario y contraseña son ejemplos y deben adaptarse al equipo.
+
+### 3. Restaurar la base de datos
+
+Iniciar MySQL y restaurar una copia SQL del esquema del proyecto mediante MySQL Workbench, incluyendo las tablas, relaciones y datos de catálogo necesarios. La copia debe ser compatible con el backend actual. Si no se dispone de ella, solicitarla al equipo antes de continuar. No utilizar datos personales reales para las pruebas.
+
+Comprobar las migraciones con `php artisan migrate:status`. Si faltan migraciones de autenticación, revisar su contenido y el esquema restaurado antes de ejecutar `php artisan migrate`. No usar `migrate:fresh`, pues elimina las tablas existentes.
+
+### 4. Iniciar Laravel
+
+Desde `backend/`:
+
+```powershell
+php artisan serve --host=127.0.0.1 --port=8000
+```
+
+Verificar el servicio en http://127.0.0.1:8000/api/estado. Mantener abierta esta terminal.
+
+### 5. Instalar e iniciar React
+
+Abrir otra terminal desde la raíz del repositorio:
+
+```powershell
+cd frontend
+npm.cmd install
+npm.cmd run dev
+```
+
+Si existe un `package-lock.json` actualizado, se puede usar `npm.cmd ci` en lugar de `npm.cmd install` para reproducir las dependencias bloqueadas.
+
+Abrir http://localhost:5173 (o la dirección indicada por Vite). Mantener MySQL y Laravel activos. Usamos `npm.cmd` en Windows para evitar problemas con las políticas de ejecución de scripts de PowerShell.
+
+### 6. Compilar el frontend
+
+```powershell
+npm.cmd run build
+```
+
+La compilación genera `frontend/dist/`. Esta carpeta no necesita versionarse. El despliegue en producción requiere configurar el servidor para servir React, resolver sus rutas y conectar `/api` con Laravel; el proxy de desarrollo no sustituye esa configuración.
+
+## Pruebas funcionales
+
+Durante el desarrollo comprobamos el registro, consulta, edición y cancelación de citas, los conflictos por horarios duplicados y superpuestos, y la persistencia tras cerrar e iniciar sesión. También verificamos la redirección al login desde las cuatro rutas privadas y revisamos visualmente las ocho interfaces en una pantalla móvil emulada de 400 × 861 píxeles. La compilación de Vite se completó sin errores.
+
+Para repetir las pruebas, registrar un cliente de prueba, seleccionar un tatuador y servicio activos y utilizar fechas futuras. Comprobar que una reserva superpuesta sea rechazada y que una cita cancelada permanezca en el historial sin acciones de edición o cancelación.
 
 ## Pruebas de la API
 
-Utilizamos Postman para comprobar las rutas y las respuestas de la API. La colección está guardada en la carpeta `postman/` del repositorio.
+Utilizamos Postman. La colección se encuentra en `postman/`.
 
-1. Abrir la colección Tattoo Studio API y seleccionar el entorno Tattoo Studio Local.
-2. Comprobar la variable `base_url` e ingresar localmente la contraseña del cliente de prueba.
-3. Iniciar sesión y utilizar el token obtenido en la variable `token`.
-4. Realizar las pruebas de citas usando el identificador de una cita propia en `id_cita`.
-5. Cerrar sesión y limpiar el token y la contraseña antes de guardar cambios en Git.
+1. Abrir Tattoo Studio API y seleccionar Tattoo Studio Local.
+2. Comprobar `base_url` y configurar localmente la contraseña de prueba.
+3. Iniciar sesión y utilizar el token obtenido en `token`.
+4. Probar las citas con un identificador propio en `id_cita`.
+5. Cerrar sesión y limpiar las credenciales antes de guardar cambios en Git.
 
-La documentación de las rutas, los ejemplos JSON y los resultados de las pruebas están en [API.md](API.md).
+Consultar [API.md](API.md) para la documentación técnica de la API.
 
 ## Control de versiones
 
-Utilizamos Git desde Visual Studio Code y GitHub como repositorio remoto. Registramos los cambios mediante commits descriptivos y los sincronizamos con `push` y `pull`.
-
-Para desarrollar la API trabajamos en la rama `feature/api-rest`, sin modificar directamente la rama principal.
-
 Repositorio: https://github.com/Xigard09/Tattoo-Studio
 
-No se deben subir el archivo `.env`, las contraseñas ni los tokens de acceso al repositorio.
+- `main`: rama principal.
+- `feature/api-rest`: desarrollo de la API REST.
+- `feature/frontend-react`: desarrollo e integración de React.
+
+| Commit | Implementación |
+|---|---|
+| `86aed46` | Configuración inicial de React e integración con Axios |
+| `d8db322` | Endpoints públicos del catálogo |
+| `e385a64` | Migración del prototipo, navegación y catálogo dinámico |
+| `22ad385` | Autenticación, registro, perfil y rutas protegidas |
+| `02207bd` | Gestión de citas en React |
+
+Trabajamos con commits descriptivos y sincronizamos mediante `push` y `pull`. No subir `.env`, contraseñas, tokens, copias de bases de datos con información sensible, `node_modules`, `vendor` ni archivos generados de compilación.
