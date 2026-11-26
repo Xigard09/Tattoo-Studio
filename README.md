@@ -86,7 +86,7 @@ Visual Studio Code, Git, PHP 8.5 con las extensiones requeridas por Laravel (inc
 ### 1. Descargar el repositorio
 
 ```powershell
-git clone -b feature/frontend-react https://github.com/Xigard09/Tattoo-Studio.git
+git clone https://github.com/Xigard09/Tattoo-Studio.git
 cd Tattoo-Studio
 ```
 
