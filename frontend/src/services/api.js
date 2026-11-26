@@ -9,4 +9,15 @@ const api = axios.create({
   },
 });
 
+// Incorporar el token en las solicitudes autenticadas.
+api.interceptors.request.use((config) => {
+  const token = sessionStorage.getItem('token');
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
 export default api;
