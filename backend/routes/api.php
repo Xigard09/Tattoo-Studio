@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CitaController;
+use App\Http\Controllers\CatalogoController;
 
 // Estado de la API
 Route::get('/estado', function () {
@@ -18,13 +19,18 @@ Route::get('/estado', function () {
 });
 
 // Rutas publicas
-Route::post('/registro', [AuthController::class, 'registro']);
+    Route::post('/registro', [AuthController::class, 'registro']);
 
-Route::post('/login', [AuthController::class, 'login'])
+    Route::post('/login', [AuthController::class, 'login'])
     ->middleware('throttle:5,1');
 
+    // Catalogo de tatuadores y servicios
+    Route::get('/tatuadores', [CatalogoController::class, 'tatuadores']);
+
+    Route::get('/servicios', [CatalogoController::class, 'servicios']);
+
 // Rutas protegidas
-Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware('auth:sanctum')->group(function () {
 
     // Autenticacion
     Route::get('/user', function (Request $request) {
@@ -43,4 +49,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/citas/{id}', [CitaController::class, 'update']);
 
     Route::delete('/citas/{id}', [CitaController::class, 'destroy']);
+
+
 });
