@@ -13,6 +13,9 @@ import Catalogo from './pages/Catalogo';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Perfil from './pages/Perfil';
+import AgendarCita from './pages/AgendarCita';
+import MisCitas from './pages/MisCitas';
+import EditarCita from './pages/EditarCita';
 
 import { AuthProvider } from './context/AuthContext';
 
@@ -45,7 +48,7 @@ function App() {
               path="/agendar"
               element={
                 <ProtectedRoute>
-                  <h2>Agendamiento - En desarrollo</h2>
+                  <AgendarCita />
                 </ProtectedRoute>
               }
             />
@@ -54,10 +57,18 @@ function App() {
               path="/mis-citas"
               element={
                 <ProtectedRoute>
-                  <h2>Mis citas - En desarrollo</h2>
+                  <MisCitas />
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/mis-citas/:id/editar"
+              element={
+                <ProtectedRoute>
+                  <EditarCita />
+                </ProtectedRoute>
+  }
+/>
 
             <Route
               path="*"
