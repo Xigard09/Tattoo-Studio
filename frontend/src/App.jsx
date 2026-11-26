@@ -1,46 +1,50 @@
-import { useEffect, useState } from 'react';
-import api from './services/api';
-import './App.css';
+
+import {
+  BrowserRouter,
+  Routes,
+  Route
+} from 'react-router-dom';
+
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import Home from './pages/Home';
+import Catalogo from './pages/Catalogo';
 
 function App() {
-  const [estadoApi, setEstadoApi] = useState(null);
-  const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    const consultarApi = async () => {
-      try {
-        const respuesta = await api.get('/estado');
-        setEstadoApi(respuesta.data);
-      } catch {
-        setError('No fue posible conectar con la API.');
-      } finally {
-        setCargando(false);
-      }
-    };
-
-    consultarApi();
-  }, []);
-
   return (
-    <main>
-      <h1>Tattoo Studio</h1>
-      <h2>Integración del frontend con la API REST</h2>
+    <BrowserRouter>
+      <Navbar />
 
-      {cargando && <p>Conectando con el servidor...</p>}
+      <main>
+        <Routes>
+          <Route path="/" element={<Home />} />
 
-      {error && <p>{error}</p>}
+          <Route path="/catalogo" element={<Catalogo />} />
 
-      {estadoApi && (
-        <section>
-          <p>Proyecto: {estadoApi.proyecto}</p>
-          <p>Servicio: {estadoApi.servicio}</p>
-          <p>Versión: {estadoApi.version}</p>
-          <p>Estado: {estadoApi.estado}</p>
-          <p>{estadoApi.mensaje}</p>
-        </section>
-      )}
-    </main>
+          <Route
+            path="/login"
+            element={<h2>Inicio de sesión - En desarrollo</h2>}
+          />
+
+          <Route
+            path="/registro"
+            element={<h2>Registro - En desarrollo</h2>}
+          />
+
+          <Route
+            path="/agendar"
+            element={<h2>Agendamiento - En desarrollo</h2>}
+          />
+
+          <Route
+            path="*"
+            element={<h2>Página no encontrada</h2>}
+          />
+        </Routes>
+      </main>
+
+      <Footer />
+    </BrowserRouter>
   );
 }
 
